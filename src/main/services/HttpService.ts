@@ -209,16 +209,21 @@ class HttpService {
 
   public async getLatestApplicationVersion() {
     // Do not use this.get because we do not want exponential backoff strategy since GitHub api is limited to 10 requests per minute for unauthenticated requests
-    const response = await this.fetch(OTHER_URLS.RELEASE_INFO);
+    try {
+      const response = await this.fetch(OTHER_URLS.RELEASE_INFO);
 
-    if (response.status != 200) {
-      return app.getVersion();
+      if (response.status == 200) {
+        const responseJson = await response.json() as any;
+        const tagName = responseJson.tag_name as string;
+
+        return tagName.replace("v", "");
+      }
+    }
+    catch (e) {
+      console.error(e);
     }
 
-    const responseJson = await response.json() as any;
-    const tagName = responseJson.tag_name as string;
-
-    return tagName.replace("v", "");
+    return app.getVersion();
   }
 
   public async downloadKeys(retries = 3) {
