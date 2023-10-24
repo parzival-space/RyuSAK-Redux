@@ -1,0 +1,15 @@
+{
+    "configurations": [
+        {
+            "type": "npm",
+            "name": "Run Client",
+            "command": "run",
+            "scripts": "start",
+            "environment": {
+                "NODE_ENV": "dev"
+            },
+            "workingDir": "client/",
+        },
+        
+    ]
+}
