@@ -1,7 +1,7 @@
 <style src="./assets/base.scss"></style>
 
 <template>
-  <navbar>
+  <navbar ref="navbar">
     <template v-slot:left>
       <v-select
         label="Configuration"
@@ -20,8 +20,10 @@
         <v-btn icon="fa-solid fa-gear" variant="text"></v-btn>
     </template>
   </navbar>
-
-  <GameList></GameList>
+  <GameList :height="gameListHeight"></GameList>
+  <div ref="footerRef" class="text-subtitle-2 text-center">
+    RyuSAK-Redux v1.0.0
+  </div>
 </template>
 
 <script>
@@ -34,8 +36,15 @@ export default defineComponent({
   components: { Center, Navbar, GameList },
   data() { return {
     items: ['Ryujinx global (default)', 'Add additional configuration'],
-    model: ref('Ryujinx global (default)')
-  }}
+    model: ref('Ryujinx global (default)'),
+    gameListHeight: "calc(100vh - calc(88px + 24px))"
+  }},
+  mounted() {
+    console.log(this.$refs.footerRef)
+    let heightString = `calc(100vh - calc(${this.$refs.navbar.$el.offsetHeight}px + ${this.$refs.footerRef.offsetHeight ?? 12}px))`
+    console.log(heightString)
+    this.gameListHeight = heightString
+  }
 });
 </script>
 
