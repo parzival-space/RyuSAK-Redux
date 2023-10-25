@@ -1,0 +1,39 @@
+:root {
+    --background-primary: rgb(18, 18, 18);
+    --background-secondary: rgb(68, 138, 255);
+    --background-tertiary: rgb(47, 96, 178);
+    
+    --foreground-primary: rgb(255, 255, 255); // Normal Text
+
+    
+}
+
+
+html {
+    background-color: var(--background-primary);
+    color: var(--foreground-primary);
+}
+
+html, body {
+    padding: 0;
+    margin: 0;
+    overflow-y: hidden !important;
+}
+
+
+
+::-webkit-scrollbar {
+    height: 13px;
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    border-radius: 10px;
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+    background-color: #b3b3b3;
+}
