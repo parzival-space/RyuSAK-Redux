@@ -1,8 +1,8 @@
 {
   "name": "client",
-  "productName": "client",
+  "productName": "Ryujinx - Redux",
   "version": "1.0.0",
-  "description": "My Electron application description",
+  "description": "Rewrite of the original RyuSAK project with some imrovements. ",
   "main": ".vite/build/main.js",
   "scripts": {
     "start": "electron-forge start",

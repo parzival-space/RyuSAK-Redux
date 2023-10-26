@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, screen } from 'electron';
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-assembler";
 import path from 'path';
 import process from "process";
@@ -11,15 +11,19 @@ if (require('electron-squirrel-startup')) {
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 1280,
-    height: 860,
-    minHeight: 680,
+    width: 920,
+    height: 680,
     minWidth: 920,
+    minHeight: 680,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
     autoHideMenuBar: true
   });
+
+  const displays = screen.getAllDisplays();
+  const display = displays.find((d) => d.bounds.x !== 0 || d.bounds.y !== 0) || displays[0];
+  mainWindow.setSize(Math.min(display.bounds.width, 1280), Math.min(display.bounds.width, 860));
 
   // and load the index.html of the app.
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {

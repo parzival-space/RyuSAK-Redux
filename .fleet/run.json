@@ -2,14 +2,32 @@
     "configurations": [
         {
             "type": "npm",
-            "name": "Run Client",
+            "name": "(Client) Start Client",
             "command": "run",
             "scripts": "start",
-            "environment": {
-                "NODE_ENV": "dev"
-            },
+            "environment": { "NODE_ENV": "dev" },
             "workingDir": "client/",
         },
-        
+        {
+            "type": "npm",
+            "name": "(Client) Start Client with Wayland support",
+            "command": "run",
+            "commandArguments": [
+                "--",
+                "--",
+                "--enable-features=UseOzonePlatform",
+                "--ozone-platform=wayland"
+            ],
+            "scripts": "start",
+            "environment": { "NODE_ENV": "dev" },
+            "workingDir": "client/",
+        },
+        {
+            "type": "npm",
+            "name": "(Client) Package for current platform",
+            "command": "run",
+            "scripts": "package",
+            "workingDir": "client/",
+        },
     ]
 }
