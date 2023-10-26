@@ -1,4 +1,4 @@
-import { app, BrowserWindow, screen } from 'electron';
+import { app, BrowserWindow, screen, shell } from 'electron';
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-assembler";
 import path from 'path';
 import process from "process";
@@ -17,8 +17,10 @@ const createWindow = () => {
     minHeight: 680,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
+      contextIsolation: true
     },
-    autoHideMenuBar: true
+    autoHideMenuBar: true,
+    icon: "./assets/ryujinx_logo.png" // todo: verify if this works correctly
   });
 
   const displays = screen.getAllDisplays();
@@ -26,12 +28,27 @@ const createWindow = () => {
   mainWindow.setSize(Math.min(display.bounds.width, 1280), Math.min(display.bounds.width, 860));
 
   // and load the index.html of the app.
+  // @ts-ignore
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
+    // @ts-ignore
     mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
   } else {
+    // @ts-ignore
     mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
   }
+
+  // focus this instance if someone tries to start a new one
+  app.on('second-instance', (event, commandLine, workingDirectory, additionalData) => {
+    if (mainWindow.isMinimized()) mainWindow.restore();
+    mainWindow.focus();
+  })
 };
+
+// Prevent running multiple instances
+if (!app.requestSingleInstanceLock({ myKey: "RyuSAK-Redux" })) {
+  app.quit();
+  console.log("Another instance is already running. Bye!")
+}
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.

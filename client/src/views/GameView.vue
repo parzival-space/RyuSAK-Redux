@@ -1,13 +1,15 @@
-<style src="./assets/base.scss"></style>
-
 <template>
-  <router-view></router-view>
+
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from "vue";
 
 export default defineComponent({
 
-});
+})
 </script>
+
+<style lang="scss">
+
+</style>

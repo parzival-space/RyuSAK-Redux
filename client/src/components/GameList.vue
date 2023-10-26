@@ -1,10 +1,11 @@
 <template>
-    <div class="game-list">
-        <div class="search">
+    <div class="game-list" ref="parentRef">
+        <div class="search" ref="searchRef">
             <v-text-field
                 label="Filter games"
                 prepend-icon="fa-solid fa-magnifying-glass"
                 variant="underlined"
+                v-model="searchInput"
             ></v-text-field>
             <v-btn
                 prepend-icon="fa-solid fa-arrows-rotate"
@@ -16,29 +17,31 @@
         </div>
         <div class="games pa-6">
             <v-card
-                @click="alert('Hi')"
                 width="180"
                 min-width="180"
-                v-for="_ in Array(260).keys()"
+                v-for="game in this.filteredGames"
+                @click="() => this.$router.push(`/game/${game.id}`)"
             >
                 <v-img
-                    src="https://img-eshop.cdn.nintendo.net/i/1a9980faeec7c32f7e3458ad2785e46ceb0324e0325a63ac4499d7d3958abcec.jpg"
+                    :src="game.iconUrl"
                     draggable="false"
                     height="180"
+                    :cover="true"
                 >
                     <template v-slot:placeholder>
                         <div class="justify-center align-center text-center fill-height d-flex bg-black">
-                            <span>No Image</span>
+                            <span></span>
                         </div>
                     </template>
                 </v-img>
-                <v-card-text class="text-center pa-3">Splatoon(tm) 3</v-card-text>
+                <v-card-text class="text-center pa-3">{{ game.name }}</v-card-text>
             </v-card>
         </div>
     </div>
 </template>
 
 <script lang="ts">
+import { Game } from "src/types/Game";
 import { defineComponent } from "vue";
 import Center from "./generic/Center.vue";
 
@@ -46,20 +49,40 @@ export default defineComponent({
     name: "GameList",
     components: { Center },
     props: {
-        games: {},
+        games: { type: Array<Game>, default: [] },
         height: { type: String, default: "500px" }
-    }
+    },
+    data() {return {
+        gamesHeight: "10px",
+        searchInput: ""
+    }},
+    computed: {
+        filteredGames() {
+            return this.games.filter((g: Game) =>
+                g.name.toLowerCase().includes(this.searchInput.toLowerCase())
+            );
+        }
+    },
+    mounted() {
+        const searchHeight = this.$refs["searchRef"].offsetHeight;
+        const parentHeight = this.$refs["parentRef"].offsetHeight;
+        this.gamesHeight = `calc(${parentHeight}px - ${searchHeight}px)`;
+    },
 });
 </script>
 
 <style lang="scss" scoped>
+.game-list {
+    height: v-bind(height);
+}
+
 .games {
     display: flex;
     flex-wrap: wrap;
     flex-basis: 180px;
 
     margin-right: 2px;
-    max-height: calc(v-bind(height) - 74px); /* I dont know a better way... */
+    max-height: v-bind(gamesHeight);
     gap: 24px;
 
     // disable selection
@@ -68,16 +91,12 @@ export default defineComponent({
     user-select: none;
 
     overflow-y: scroll;
-    height: 100dvh;
-
     &::-webkit-scrollbar-thumb {
         transition: background 3s;
         background-color: transparent;
     }
-
     &:hover {
         transition: background 0s;
-
         &::-webkit-scrollbar-thumb {
             transition: background 0s;
             background-color: #b3b3b3;
