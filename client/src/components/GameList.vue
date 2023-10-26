@@ -30,12 +30,15 @@
                 >
                     <template v-slot:placeholder>
                         <div class="justify-center align-center text-center fill-height d-flex bg-black">
-                            <span></span>
+                            <span>No Preview</span>
                         </div>
                     </template>
                 </v-img>
                 <v-card-text class="text-center pa-3">{{ game.name }}</v-card-text>
             </v-card>
+        </div>
+        <div v-if="this.filteredGames.length < 1" class="text-center">
+            No games found.
         </div>
     </div>
 </template>
